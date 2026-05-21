@@ -25,6 +25,14 @@ const USERS_FILE = path.join(DATA_DIR, 'users.json');
 const upload = multer({ storage: multer.memoryStorage() }); // memória, sem disco
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname)));
+app.get('/', (req, res) => {
+  const p1 = path.join(__dirname, 'public', 'index.html');
+  const p2 = path.join(__dirname, 'index.html');
+  if (require('fs').existsSync(p1)) res.sendFile(p1);
+  else if (require('fs').existsSync(p2)) res.sendFile(p2);
+  else res.send('index.html não encontrado');
+});
 
 // ─── Store de Sessão em Arquivo (persiste no Render via users.json) ───────────
 // Implementa a interface RemoteAuth Store usando arquivo JSON
